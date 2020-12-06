@@ -1,3 +1,4 @@
+/// Showcases genericity, "correct" / "idiomatic" way of parsing things in Rust
 use crate::{
     error::AOCError,
     utils::grid::{Coordinates, Grid, GridParsingError},

@@ -1,3 +1,6 @@
+/// Showcases bitshifing and iter folding.
+/// Unclear how part 1 could be done any better
+
 struct Seat {
     pub row: u8,
     pub column: u8,
@@ -5,10 +8,13 @@ struct Seat {
 
 impl Seat {
     pub fn id(&self) -> u32 {
+        // Also corresponds to bitshifting 3 times to the left (*8 because 8 = 2^3) and bitwise-ORing with column
+        // Though this is likely what's being done by LLVM in the background so let's keep it clean and readable
         self.row as u32 * 8 + self.column as u32
     }
 }
 
+/// Idiomatic Rust wants us to impl FromStr in this case, but this operation is Infallible anyway (assuming correct input, which AOC has)
 impl From<&str> for Seat {
     fn from(input: &str) -> Seat {
         let row = input[0..7]

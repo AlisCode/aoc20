@@ -1,5 +1,6 @@
+/// More iterators showcase.
 /// Two solutions to part one : interestingly enough, folding seems to
-/// benefit from better optimization.
+/// be benefiting from better optimization ?
 use std::collections::HashSet;
 
 #[aoc(day6, part1)]
@@ -47,4 +48,4 @@ fn part_two(input: &str) -> usize {
         .sum()
 }
 
-// Yea, we could also fold and use a hashmap for part2 instead of double-iterating
+// Yea, we could also fold and use a hashmap for part2 instead of double-iterating. No time.

@@ -1,3 +1,11 @@
+/// Showcases newtype pattern.
+/// Showcases usage of `?` (a bit of a hacky way to do early return)
+/// The validation logic for part 2 is a bit of a pain...
+///
+/// This could also be done with the `nom` crate to showcase safe and maintainble parser combinators in Rust.
+/// I have no time to do that right now though.
+///
+/// This part two is basically awful, but the logic behind it is easy so I got it to work first try and I'm not modifying this now.   
 use std::collections::HashMap;
 
 pub struct Passport(HashMap<String, String>);
