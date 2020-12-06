@@ -49,3 +49,32 @@ fn part_two(input: &str) -> usize {
 }
 
 // Yea, we could also fold and use a hashmap for part2 instead of double-iterating. No time.
+#[cfg(test)]
+pub mod tests {
+    use super::*;
+    const DUMMY_INPUT: &'static str = "abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b";
+
+    #[test]
+    fn test_part_one() {
+        assert_eq!(part_one(DUMMY_INPUT), 11);
+    }
+
+    #[test]
+    fn test_part_two() {
+        assert_eq!(part_two(DUMMY_INPUT), 6);
+    }
+}

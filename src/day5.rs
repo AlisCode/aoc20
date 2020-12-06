@@ -58,7 +58,7 @@ pub mod tests {
     use super::*;
 
     #[test]
-    fn parse_seat() {
+    fn parse_seat_and_calc_id() {
         let test_seat = Seat::from("BFFFBBFRRR");
         assert_eq!(test_seat.row, 70);
         assert_eq!(test_seat.column, 7);
