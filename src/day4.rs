@@ -10,8 +10,8 @@ use std::collections::HashMap;
 
 pub struct Passport(HashMap<String, String>);
 
-impl Passport {
-    pub fn parse(input: &str) -> Self {
+impl From<&str> for Passport {
+    fn from(input: &str) -> Self {
         let input = input.replace("\n", " ");
         let words = input.split(" ");
         let map: HashMap<String, String> = words
@@ -24,7 +24,9 @@ impl Passport {
 
         Passport(map)
     }
+}
 
+impl Passport {
     pub fn is_valid(&self) -> bool {
         self.0.contains_key("byr")
             && self.0.contains_key("iyr")
@@ -118,7 +120,7 @@ impl Passport {
 fn part_one(input: &str) -> usize {
     input
         .split("\n\n")
-        .map(|inp| Passport::parse(inp))
+        .map(Passport::from)
         .filter(Passport::is_valid)
         .count()
 }
@@ -127,7 +129,7 @@ fn part_one(input: &str) -> usize {
 fn part_two(input: &str) -> usize {
     input
         .split("\n\n")
-        .filter_map(|inp| Passport::parse(inp).is_valid_part_two())
+        .filter_map(|inp| Passport::from(inp).is_valid_part_two())
         .filter(|x| *x)
         .count()
 }
