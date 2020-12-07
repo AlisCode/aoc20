@@ -76,16 +76,14 @@ fn part_one_recurse(rules: &[BagRules], color: &str, set: &mut HashSet<String>) 
 fn part_two(input: &[BagRules]) -> usize {
     let mut map: HashMap<String, usize> = Default::default();
     map.insert("nothing".to_string(), 0);
-    let mut set_done: HashSet<String> = Default::default();
-    set_done.insert("nothing".to_string());
     let mut run = true;
     while run {
         run = false;
         for rules in input {
-            if set_done.contains(&rules.color) {
+            if map.contains_key(&rules.color) {
                 continue;
             }
-            if rules.rules.iter().all(|rr| set_done.contains(&rr.contains)) {
+            if rules.rules.iter().all(|rr| map.contains_key(&rr.contains)) {
                 let sum: usize = rules
                     .rules
                     .iter()
@@ -93,7 +91,6 @@ fn part_two(input: &[BagRules]) -> usize {
                     .sum();
                 let entry = map.entry(rules.color.clone()).or_default();
                 *entry = sum + 1;
-                set_done.insert(rules.color.clone());
                 run = true;
             }
         }
