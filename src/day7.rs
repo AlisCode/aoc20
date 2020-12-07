@@ -1,7 +1,12 @@
 /// More non-trivial parsing!
 /// First uses the naïve recursive approach.
 /// Second uses a slightly optimized approach because recursion was exploding the stack
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    str::FromStr,
+};
+
+use crate::error::AOCError;
 
 #[derive(Debug, PartialEq, Eq)]
 struct BagRule {
@@ -15,43 +20,49 @@ struct BagRules {
     pub rules: Vec<BagRule>,
 }
 
-impl From<&str> for BagRule {
+impl FromStr for BagRule {
+    type Err = std::num::ParseIntError;
     /// Format is  "<number> <color1> <color2> bag(s)" | "no other bag"
-    fn from(input: &str) -> Self {
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
         if input == "no other bags." {
-            return BagRule {
+            return Ok(BagRule {
                 count: 0,
                 contains: "nothing".to_string(),
-            };
+            });
         }
 
         let input: Vec<&str> = input.split(" ").collect();
-        let count: usize = input[0].parse().expect("Failed to parse count");
+        let count: usize = input[0].parse()?;
         let contains = format!("{} {}", input[1], input[2]);
 
-        BagRule { count, contains }
+        Ok(BagRule { count, contains })
     }
 }
 
-impl From<&str> for BagRules {
+impl FromStr for BagRules {
+    type Err = std::num::ParseIntError;
+
     /// Format is "<color1> <color2> bags contain (<bag_rule>, )+"
-    fn from(input: &str) -> Self {
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
         let words: Vec<&str> = input.split(" ").collect();
         let color = format!("{} {}", words[0], words[1]);
 
-        let rules: Vec<BagRule> = words[4..]
+        let rules = words[4..]
             .join(" ")
             .split(", ")
-            .map(BagRule::from)
-            .collect();
+            .map(BagRule::from_str)
+            .collect::<Result<_, _>>()?;
 
-        BagRules { color, rules }
+        Ok(BagRules { color, rules })
     }
 }
 
 #[aoc_generator(day7)]
-fn input_generator(input: &str) -> Vec<BagRules> {
-    input.lines().map(BagRules::from).collect()
+fn input_generator(input: &str) -> Result<Vec<BagRules>, AOCError> {
+    Ok(input
+        .lines()
+        .map(BagRules::from_str)
+        .collect::<Result<_, std::num::ParseIntError>>()?)
 }
 
 #[aoc(day7, part1)]
@@ -117,7 +128,8 @@ dotted black bags contain no other bags.";
     #[test]
     fn parse_bag_rules() {
         let bag_rules =
-            BagRules::from("light red bags contain 1 bright white bag, 2 muted yellow bags.");
+            BagRules::from_str("light red bags contain 1 bright white bag, 2 muted yellow bags.")
+                .expect("Failed to parse");
 
         assert_eq!(bag_rules.color, "light red");
         assert_eq!(
@@ -137,13 +149,13 @@ dotted black bags contain no other bags.";
 
     #[test]
     fn test_part_one() {
-        let input = input_generator(DUMMY_INPUT);
+        let input = input_generator(DUMMY_INPUT).expect("Failed while parsing");
         assert_eq!(part_one(&input), 4);
     }
 
     #[test]
     fn test_part_two() {
-        let input = input_generator(DUMMY_INPUT);
+        let input = input_generator(DUMMY_INPUT).expect("Failed while parsing");
         assert_eq!(part_two(&input), 32);
     }
 }

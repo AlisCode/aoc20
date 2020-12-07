@@ -6,4 +6,6 @@ pub enum AOCError {
     RecapError(#[from] recap::Error),
     #[error("Error while parsing grid: {_0}")]
     GridError(#[from] crate::utils::grid::GridParsingError),
+    #[error("Error parsing int: {_0}")]
+    ParseInt(#[from] std::num::ParseIntError),
 }
