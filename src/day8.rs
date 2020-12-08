@@ -1,3 +1,5 @@
+/// Showcasing thiserror for instruction parsing
+/// Maybe my logic for part 2 could be done better idk ?
 use std::{collections::HashSet, str::FromStr};
 
 use thiserror::Error;
