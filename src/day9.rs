@@ -33,18 +33,19 @@ fn solve_for_preamble_size(input: &[i64], preamble_size: usize) -> i64 {
 #[aoc(day9, part2)]
 fn part_two(input: &[i64]) -> i64 {
     let target = part_one(input);
-    let mut window_size = 2;
-    loop {
-        if let Some(window) = input
-            .windows(window_size)
-            .find(|w| w.iter().sum::<i64>() == target)
-        {
-            let min = window.iter().min().expect("Failed to find min");
-            let max = window.iter().max().expect("Failed to find max");
-            return min + max;
-        }
-        window_size += 1;
-    }
+    (2..)
+        .filter_map(|window_size| {
+            input
+                .windows(window_size)
+                .find(|w| w.iter().sum::<i64>() == target)
+                .map(|w| {
+                    let min = w.iter().min().expect("Failed to find min");
+                    let max = w.iter().max().expect("Failed to find max");
+                    min + max
+                })
+        })
+        .next()
+        .expect("Failed to find answer")
 }
 
 #[cfg(test)]
